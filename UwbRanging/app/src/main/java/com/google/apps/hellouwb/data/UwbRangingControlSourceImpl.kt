@@ -40,24 +40,24 @@ internal class UwbRangingControlSourceImpl(
     UwbConnectionManager.getInstance(context),
 ) : UwbRangingControlSource {
 
-  private var uwbEndpoint = UwbEndpoint(endpointId, SecureRandom.getSeed(8))
+  private var uwbEndpoint = UwbEndpoint(endpointId, SecureRandom.getSeed(8))  // uwbEndpoint를 endpointId와 random한 값으로 설정
 
-  private var uwbSessionScope: UwbSessionScope =
-    getSessionScope(DeviceType.CONTROLLER, ConfigType.CONFIG_UNICAST_DS_TWR)
+  private var uwbSessionScope: UwbSessionScope =     // UwbSessionScope 인스턴스로, UWB 세션의 범위를 나타냄
+    getSessionScope(DeviceType.CONTROLLER, ConfigType.CONFIG_UNICAST_DS_TWR)    // TWR을 이용함
 
-  private var rangingJob: Job? = null
+  private var rangingJob: Job? = null   // ranging 작업을 나타냄, default=null
 
-  private val resultFlow = MutableSharedFlow<EndpointEvents>(
+  private val resultFlow = MutableSharedFlow<EndpointEvents>(   // ranging 결과를 나타냄, 밑의 부분은 초기화 설정을 위한 변수
     replay = 0,
     onBufferOverflow = BufferOverflow.DROP_OLDEST,
     extraBufferCapacity = 1
   )
 
-  private val runningStateFlow = MutableStateFlow(false)
+  private val runningStateFlow = MutableStateFlow(false)   // kotlin MutableStateFlow에 대해 알아야함
 
   override val isRunning = runningStateFlow.asStateFlow()
 
-  private fun getSessionScope(deviceType: DeviceType, configType: ConfigType): UwbSessionScope {
+  private fun getSessionScope(deviceType: DeviceType, configType: ConfigType): UwbSessionScope {  //
     return when (deviceType) {
       DeviceType.CONTROLEE -> uwbConnectionManager.controleeUwbScope(uwbEndpoint)
       DeviceType.CONTROLLER ->

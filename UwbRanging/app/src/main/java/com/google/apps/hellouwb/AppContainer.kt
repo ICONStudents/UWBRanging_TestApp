@@ -23,7 +23,7 @@ import com.google.apps.hellouwb.data.SettingsStore
 import com.google.apps.hellouwb.data.UwbRangingControlSource
 
 interface AppContainer {
-  val rangingResultSource: UwbRangingControlSource
+    val rangingResultSource: UwbRangingControlSource   // interface이기 때문에 초기화는 구현단계에서
     val settingsStore: SettingsStore
     val contentResolver: ContentResolver
 }

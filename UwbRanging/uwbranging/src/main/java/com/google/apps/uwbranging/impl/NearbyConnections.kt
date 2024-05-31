@@ -143,7 +143,7 @@ internal class NearbyConnections(
     awaitClose {
       disconnectAll()
       connectionsClient.stopAdvertising()
-    }
+
   }
 
   private fun disconnectAll() {

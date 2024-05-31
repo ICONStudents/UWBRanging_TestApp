@@ -47,13 +47,13 @@ internal class AppContainerImpl(
     init {
         coroutineScope.launch {
             settingsStore.appSettings.collect {
-                val endpointId = it.deviceDisplayName + "|" + it.deviceUuid
-                if (_rangingResultSource == null) {
+                val endpointId = it.deviceDisplayName + "|" + it.deviceUuid  // endpointId를 구성하는 것, 기기 고유의uuid를 사용
+                if (_rangingResultSource == null) {   // UwbRangingControlSourceImpl 인스턴스가 아직 생성되지 않은 경우
                     _rangingResultSource =
-                        UwbRangingControlSourceImpl(context, endpointId, coroutineScope)
-                    afterLoading()
+                        UwbRangingControlSourceImpl(context, endpointId, coroutineScope)  // 인스턴스를 생성하고
+                    afterLoading()   // 로딩이 완료됨을 알림
                 } else {
-                    rangingResultSource.deviceType = it.deviceType
+                    rangingResultSource.deviceType = it.deviceType  // 이미 생성된 경우 endpointId를 업데이트함
           rangingResultSource.updateEndpointId(endpointId)
         }
       }

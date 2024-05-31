@@ -29,8 +29,8 @@ import com.google.apps.hellouwb.ui.theme.HellouwbTheme
 
 @Composable
 fun HelloUwbApp(appContainer: AppContainer) {
-  val rangingViewModel: RangingViewModel =
-    viewModel(factory = RangingViewModel.provideFactory(appContainer.rangingResultSource))
+  val rangingViewModel: RangingViewModel =  // RangingViewModel의 instance를 생성하는 부분
+    viewModel(factory = RangingViewModel.provideFactory(appContainer.rangingResultSource))   // rangingResultSource를 전달해서 Ranging instance를 생성하여 viewModel에 전달
   val uiState by rangingViewModel.uiState.collectAsState()
   HellouwbTheme {
     AppNavBar(

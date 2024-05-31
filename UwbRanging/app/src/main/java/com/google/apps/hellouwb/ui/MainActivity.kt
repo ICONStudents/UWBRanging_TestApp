@@ -29,15 +29,15 @@ import androidx.activity.compose.setContent
 import com.google.apps.hellouwb.HelloUwbApplication
 
 
-private const val PERMISSION_REQUEST_CODE = 1234
+private const val PERMISSION_REQUEST_CODE = 1234  //PERMISSION_REQUEST_CODE는 권한 요청과 그 결과를 연결하는 역할, 앱 내에서 고유해야함
 
 class MainActivity : ComponentActivity() {
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
-    requestPermissions()
-    (application as HelloUwbApplication).initContainer {
-      runOnUiThread { setContent { HelloUwbApp((application as HelloUwbApplication).container) } }
+    requestPermissions()    // 밑에서 정의하는 요청 받아오는 코드
+    (application as HelloUwbApplication).initContainer {  // application instance를 HelloUwbApplication으로 캐스팅하고, initContainer 메서드를 호출
+      runOnUiThread { setContent { HelloUwbApp((application as HelloUwbApplication).container) } }  // 이부분에서 HelloUwbApp을 request
     }
 
     /**
@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
 
   private fun requestPermissions() {
     if (!arePermissionsGranted()) {  // Request permissions if not granted
-      requestPermissions(PERMISSIONS_REQUIRED, PERMISSION_REQUEST_CODE)
+      requestPermissions(PERMISSIONS_REQUIRED, PERMISSION_REQUEST_CODE)  //첫 번째 매개변수로 요청할 권한의 배열을, 두 번째 매개변수로 권한 요청에 대한 고유한 식별자를 받음
     }
   }
 
@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
     return true
   }
 
-  override fun onRequestPermissionsResult(
+  override fun onRequestPermissionsResult(   // 권한을 받아오는 실질적인 부분
     requestCode: Int,
     permissions: Array<out String>,
     grantResults: IntArray,
@@ -85,9 +85,9 @@ class MainActivity : ComponentActivity() {
     }
   }
 
-  companion object {
+  companion object {   // 버젼에 따른 추가 권한 사항 처리
 
-    private val PERMISSIONS_REQUIRED_BEFORE_T =
+    private val PERMISSIONS_REQUIRED_BEFORE_T =  // Android T 버전 이전에 필요한 권한을 정의
       listOf(
         // Permissions needed by Nearby Connection
         Manifest.permission.BLUETOOTH,
@@ -103,15 +103,15 @@ class MainActivity : ComponentActivity() {
         Manifest.permission.UWB_RANGING
       )
 
-    private val PERMISSIONS_REQUIRED_T =
+    private val PERMISSIONS_REQUIRED_T =   // Android T 버전에서 추가로 필요한 권한을 정의
       arrayOf(
         Manifest.permission.NEARBY_WIFI_DEVICES,
       )
 
     private val PERMISSIONS_REQUIRED =
-      PERMISSIONS_REQUIRED_BEFORE_T.toMutableList()
+      PERMISSIONS_REQUIRED_BEFORE_T.toMutableList()  // 가변 리스트로 변환
         .apply {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {  // Andriod가 T version이상이면 추가
             addAll(PERMISSIONS_REQUIRED_T)
           }
         }

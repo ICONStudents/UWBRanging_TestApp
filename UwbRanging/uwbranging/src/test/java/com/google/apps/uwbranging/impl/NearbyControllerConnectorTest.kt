@@ -62,7 +62,7 @@ class NearbyControllerConnectorTest {
 
   private val uwbEndpoint = UwbEndpoint("UWB2", byteArrayOf(3, 4, 5))
 
-  private val controleeSessionInfo =
+  private val controleeSessionInfo =   // 서로 정보공유 하는 곳
     Control.newBuilder()
       .setId("UWB1")
       .setMetadata(ByteString.copyFrom(byteArrayOf(1, 2, 3)))
@@ -71,7 +71,7 @@ class NearbyControllerConnectorTest {
         UwbConnectionInfo.newBuilder()
           .setCapabilities(
             UwbCapabilities.newBuilder()
-              .addAllSupportedConfigIds(listOf(RangingParameters.UWB_CONFIG_ID_1))
+              .addAllSupportedConfigIds(listOf(RangingParameters.UWB_CONFIG_ID_1))  // CONFIG_ID_1: FiRa-defined unicast STATIC STS DS-TWR ranging
               .setSupportsAzimuth(true)
               .setSupportsElevation(true)
               .build()
@@ -82,11 +82,12 @@ class NearbyControllerConnectorTest {
 
   private lateinit var eventPipe: (event: NearbyEvent) -> Unit
 
-  @Before
-  fun setUp() {
-    whenever(controllerSessionScope.localAddress).thenReturn(UwbAddress(byteArrayOf(3, 4)))
-    whenever(controllerSessionScope.uwbComplexChannel).thenReturn(UwbComplexChannel(9, 11))
-    controllerConnector =
+  @BeforeEach
+  fun setUp() {  // controller
+    whenever(controllerSessionScope.localAddress).thenReturn(UwbAddress(byteArrayOf(3, 4)))  // controllerSessionScope.localAddress 실행되면 byteArray[3, 4]를 반환함
+    println(UwbAddress(byteArrayOf(3, 4))  // 결과를 보고싶다!!!!, byteArrayOf(3, 4)를 확인하기 위해 넣음
+    whenever(controllerSessionScope.uwbComplexChannel).thenReturn(UwbComplexChannel(9, 11))  // channel, preamable Index 값을 가진 UwbComplex channel을 return함
+    controllerConnector =                                                                             // Returns the string format of UwbComplexChannel.
       NearbyControllerConnector(uwbEndpoint, RangingParameters.UWB_CONFIG_ID_1, connections) {
         controllerSessionScope
       }
