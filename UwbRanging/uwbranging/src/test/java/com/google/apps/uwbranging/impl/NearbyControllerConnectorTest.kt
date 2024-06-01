@@ -84,7 +84,7 @@ class NearbyControllerConnectorTest {
 
   @BeforeEach
   fun setUp() {  // controller
-    whenever(controllerSessionScope.localAddress).thenReturn(UwbAddress(byteArrayOf(3, 4)))  // controllerSessionScope.localAddress 실행되면 byteArray[3, 4]를 반환함
+    whenever(controllerSessionScope.localAddress).thenReturn(UwbAddress(byteArrayOf(3, 4)))  // controllerSessionScope.localAddress 실행되면 byteArray[3, 4]를 반환함, controller의 address가 3,4 ?
     println(UwbAddress(byteArrayOf(3, 4))  // 결과를 보고싶다!!!!, byteArrayOf(3, 4)를 확인하기 위해 넣음
     whenever(controllerSessionScope.uwbComplexChannel).thenReturn(UwbComplexChannel(9, 11))  // channel, preamable Index 값을 가진 UwbComplex channel을 return함
     controllerConnector =                                                                             // Returns the string format of UwbComplexChannel.
@@ -94,11 +94,11 @@ class NearbyControllerConnectorTest {
   }
 
   @Test
-  fun testDiscovery() = runTest {
-    whenever(connections.startDiscovery())
+  fun testDiscovery() = runTest {   // Nearbu
+    whenever(connections.startDiscovery())  // channelFlow
       .thenReturn(
         channelFlow {
-          eventPipe = { trySend(it) }
+          eventPipe = { trySend(it) }   // NearbyEvent type의 instance가 들어감
           awaitClose {}
         }
       )

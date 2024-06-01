@@ -43,14 +43,14 @@ internal class UwbSessionScopeImpl(
 
   private val activeJobs = mutableMapOf<UwbEndpoint, Job>()
 
-  override fun prepareSession() = channelFlow {
+  override fun prepareSession() = channelFlow {                   // Session을 준비하고 channelFlow를 반환함
     val job = launch {
-      connector.start().collect { event ->
+      connector.start().collect { event ->          // 연결을 시작함
         when (event) {
-          is UwbOobEvent.UwbEndpointFound -> {
-            val rangingEvents = processEndpointFound(event)
-            activeJobs[event.endpoint] = launch { rangingEvents.collect { sendResult(it) } }
-          }
+
+          }is UwbOobEvent.UwbEndpointFound -> {           // Endpoint가 있으면
+          val rangingEvents = processEndpointFound(event)      // 거리를 재는 event를 정의,,,,,
+          activeJobs[event.endpoint] = launch { rangingEvents.collect { sendResult(it) } }    // launch를 통해 corutine 시작, 결과를 activeJobs에 저장함
           is UwbOobEvent.UwbEndpointLost -> processEndpointLost(event.endpoint)
           is UwbOobEvent.MessageReceived ->
             trySend(EndpointEvents.EndpointMessage(event.endpoint, event.message))

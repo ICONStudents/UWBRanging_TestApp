@@ -98,12 +98,12 @@ internal class UwbRangingControlSourceImpl(
     }
   }
 
-  override fun start() {
+  override fun start() {    // 거리를 재는 부분
     if (rangingJob == null) {
       rangingJob =
         coroutineScope.launch {
           uwbSessionScope.prepareSession().collect {
-            resultFlow.tryEmit(it)
+            resultFlow.tryEmit(it)       // 단일 매개변수 이름을 대체하는 예약어, 이 경우 it은 RangingResult 이벤트를 참조
           }
         }
       runningStateFlow.update { true }
